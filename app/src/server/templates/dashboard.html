@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% end %}
+
+{% block content %}
+{% autoescape None %}
+
+<table class="table">
+  <thead>
+    <tr>
+        <th scope="col">#</th>
+        {% for col in cols %}
+        <th scope="col">{{col}}</th>
+        {% end %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+        <tr>
+          <th scope="row">1</th>
+          <td>{{item.day}}</td>
+          <td>{{item.level}}</td>
+          <td>{{item.total}}</td>
+        </tr>
+    {% end %}
+    </tr>
+  </tbody>
+</table>
+
+{% end %}

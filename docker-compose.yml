@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  zookeeper_analytics:
+    image: wurstmeister/zookeeper
+    hostname: zookeeper_analytics
+    restart: always
+    ports:
+      - "2181:2181"
+    volumes:
+      - ./zookeeper/data:/data
+      - ./zookeeper/datalog:/datalog
+
+  kafka_analytics:
+    image: wurstmeister/kafka
+    hostname: kafka_analytics
+    ports:
+      - "9092:9092"
+    environment:
+      HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_analytics:2181"
+      KAFKA_BROKER_ID: "1"
+
+  clickhouse_analytics:
+    image: yandex/clickhouse-server
+    ports:
+      - 8123:8123
+      - 9000:9000
+    depends_on:
+      - kafka_analytics
+    links:
+      - kafka_analytics
