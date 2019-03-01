@@ -1,4 +1,4 @@
-# Basic example server analytics
+# Example basic server analytics
 
 Used:
  - Tornado http server
