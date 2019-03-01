@@ -22,3 +22,5 @@ pip3 install -r requirements.txt
 ```bash
 python3 ./server.py
 ```
+###View basic dashboard
+[http://localhost:8090/analytics/dashboard/](http://localhost:8090/analytics/dashboard/)
