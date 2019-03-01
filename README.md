@@ -21,5 +21,5 @@ sudo docker-compose -f docker-compose.yml up
 sudo docker-compose -f docker-compose.yml rm -f
 ```
 
-###View basic dashboard
+### View basic dashboard
 [http://localhost:8090/analytics/dashboard/](http://localhost:8090/analytics/dashboard/)
