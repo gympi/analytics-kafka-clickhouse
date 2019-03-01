@@ -1,8 +1,8 @@
 import copy
 
-from app.src.libs.clickhouse_connect import session
-from app.src.libs.entities import VisitStat
-from app.src.server.handlers.base import Base
+from libs.clickhouse_connect import session
+from libs.entities import VisitStat
+from http_server.handlers.base import Base
 
 
 class DashboardHandler(Base):

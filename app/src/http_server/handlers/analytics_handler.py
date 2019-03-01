@@ -4,7 +4,7 @@ import traceback
 
 from urllib.parse import urlparse
 
-from app.src.libs.storage_adapters import KafkaAdapter
+from libs.storage_adapters import KafkaAdapter
 from .base import Base
 
 

@@ -1,9 +1,7 @@
-import datetime
 import json
 import timeit
 import tornado
 import tornado.web
-import time
 
 origin_urls = []
 
@@ -20,7 +18,7 @@ class Base(tornado.web.RequestHandler):
         self._init_helpers()
 
     def _init_templates(self):
-        self._templates_path = "./templates/"
+        self._templates_path = "./http_server/templates/"
         self._template = "main.html"
 
     def _init_default_params(self):

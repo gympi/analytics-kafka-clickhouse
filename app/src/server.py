@@ -7,8 +7,8 @@ import tornado.ioloop
 import tornado.web
 import tornado.httpserver
 
-from app.src.server.actions import actions
-from app.src.libs.system_environment import SystemEnvironment
+from http_server.actions import actions
+from libs.system_environment import SystemEnvironment
 
 
 def make_app():

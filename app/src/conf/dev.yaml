@@ -1,0 +1,13 @@
+services:
+  app:
+    port: 8090
+    forks: 1 # forks one process per cpu
+
+  kafka:
+    host: 'kafka_analytics'
+    port: 9092
+
+  clickhouse:
+    host: 'clickhouse_analytics'
+    port: 8123
+    scheme: 'analytics'

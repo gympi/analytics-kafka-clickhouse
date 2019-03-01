@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from clickhouse_driver import Client
 from kafka import KafkaProducer
 
-from app.src.libs.system_environment import SystemEnvironment
+from libs.system_environment import SystemEnvironment
 
 
 class AnalyticsAdapter(ABC):

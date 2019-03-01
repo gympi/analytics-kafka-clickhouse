@@ -6,6 +6,6 @@ actions = [
     (r"/analytics/", AnalyticsHandler),
     (r"/analytics/dashboard/", DashboardHandler),
 
-    (r"/analytics/static/(.*$)", StaticHandler, {"path": "./static"}),
-    (r"/(.*$)", StaticHandler, {"path": "./static"}),
+    (r"/analytics/static/(.*$)", StaticHandler, {"path": "./http_server/static"}),
+    (r"/(.*$)", StaticHandler, {"path": "./http_server/static"}),
 ]

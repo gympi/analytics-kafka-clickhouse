@@ -6,7 +6,7 @@ class SystemEnvironment:
     class __SystemEnvironment:
         def __init__(self, conf_folder_path: str = None):
             if conf_folder_path is None:
-                self._conf_path = '../conf'
+                self._conf_path = './conf'
             else:
                 self._conf_path = conf_folder_path
 
