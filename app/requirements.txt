@@ -1,9 +1,5 @@
 tornado
-pymysql
-requests
 pika
-time_uuid
-redis
 pyyaml
 sqlalchemy
 clickhouse-driver
