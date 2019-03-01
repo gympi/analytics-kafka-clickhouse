@@ -53,7 +53,7 @@ services:
     volumes:
       - ./app/src/:/usr/src/app
     ports:
-      - "8091:8090"
+      - "8091:8091"
     depends_on:
       - kafka_analytics
       - clickhouse_analytics
@@ -68,23 +68,23 @@ services:
       options:
         max-size: "50m"
         max-file: "2"
-#
-#  nginx_analytics:
-#    container_name: nginx_analytics
-#    image: nginx:latest
-#    ports:
-#      - "8090:8090"
-#    volumes:
-#      - ./app/src/:/usr/src/app
-#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-#      - ./nginx/mime.types:/etc/nginx/mime.types:ro
-#      - ./nginx/app.conf:/etc/nginx/sites-enabled/app.conf:ro
-#    depends_on:
-#      - app_analytics
-#    links:
-#      - app_analytics
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "50m"
-#        max-file: "2"
+
+  nginx_analytics:
+    container_name: nginx_analytics
+    image: nginx:latest
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./app/src/:/usr/src/app
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/mime.types:/etc/nginx/mime.types:ro
+      - ./nginx/app.conf:/etc/nginx/sites-enabled/app.conf:ro
+    depends_on:
+      - app_analytics
+    links:
+      - app_analytics
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "2"

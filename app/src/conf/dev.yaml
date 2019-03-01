@@ -1,6 +1,6 @@
 services:
   app:
-    port: 8090
+    port: 8091
     forks: 1 # forks one process per cpu
 
   kafka:
