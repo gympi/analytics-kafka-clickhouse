@@ -27,4 +27,4 @@ CREATE MATERIALIZED VIEW `analytics`.`visit_stat_consumer` TO `analytics`.`visit
 -- SELECT * FROM `analytics`.`visit_stat_queue`;
 -- SELECT * FROM `analytics`.`visit_stat`;
 
-SELECT toUUID(rand64());
+-- SELECT toUUID(rand64());
