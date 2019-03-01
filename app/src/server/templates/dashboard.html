@@ -5,26 +5,35 @@
 {% block content %}
 {% autoescape None %}
 
-<table class="table">
-  <thead>
-    <tr>
-        <th scope="col">#</th>
-        {% for col in cols %}
-        <th scope="col">{{col}}</th>
-        {% end %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in items %}
+<div class="row">
+    {% include "pagination.html" %}
+</div>
+<div class="row">
+
+    <table class="table">
+      <thead>
         <tr>
-          <th scope="row">1</th>
-          <td>{{item.day}}</td>
-          <td>{{item.level}}</td>
-          <td>{{item.total}}</td>
+            <th scope="col">#</th>
+            {% for col in cols %}
+            <th scope="col">{{col}}</th>
+            {% end %}
         </tr>
-    {% end %}
-    </tr>
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+        {% for i, item in enumerate(items, offset + 1) %}
+            <tr>
+              <th scope="row">{{ i }}</th>
+                 {% for col in cols %}
+                  <td>{{getattr(item, col)}}</td>
+                {% end %}
+            </tr>
+        {% end %}
+      </tbody>
+    </table>
+
+</div>
+<div class="row">
+    {% include "pagination.html" %}
+</div>
 
 {% end %}

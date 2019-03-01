@@ -5,7 +5,7 @@ services:
 
   kafka:
     host: 'localhost'
-    port: 9000
+    port: 9092
 
   clickhouse:
     host: 'localhost'

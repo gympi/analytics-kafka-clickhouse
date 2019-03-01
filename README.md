@@ -6,13 +6,13 @@ Used:
  - Clickhouse is an open source column-oriented database
 
 
-## Init environment 
+## Init python environment 
 ### *nix
 ```bash
 mkdir venv
 python3 -m venv venv
 source venv/bin/activate
-pip3 install -r requirements.txt
+pip3 install -r ./app/requirements.txt
 ```
 
 ### Windows
@@ -21,4 +21,20 @@ mkdir venv
 python -m venv venv
 .\venv\Scripts\activate
 pip3 install -r requirements.txt
+```
+
+
+### Build docker-compose.yml analytics
+```bash
+sudo docker-compose -f docker-compose.yml build
+```
+
+### Up docker-compose.yml analytics
+```bash
+sudo docker-compose -f docker-compose.yml up
+```
+
+### Remove docker-compose.yml analytics
+```bash
+sudo docker-compose -f docker-compose.yml rm -f
 ```

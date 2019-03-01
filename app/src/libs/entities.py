@@ -1,6 +1,6 @@
 import re
 
-from sqlalchemy import String, Column, Date, Integer, inspect
+from sqlalchemy import String, Column, Date, inspect, DateTime, Integer
 from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.ext.declarative import declared_attr
 
@@ -20,7 +20,12 @@ class MixinEntity:
         return '_'.join(split_res).lower()
 
 
-class Daily(Base, MixinEntity):
-    day = Column(Date, primary_key=True)
-    level = Column(String)
-    total = Column(Integer)
+class VisitStat(Base, MixinEntity):
+    uid = Column(String, primary_key=True)
+    date_visit = Column(Date)
+    time_visit = Column(DateTime)
+    timestamp = Column(Integer)
+    project = Column(String)
+    path = Column(String)
+    request_ip = Column(String)
+    user_agent = Column(String)

@@ -3,7 +3,6 @@ services:
   zookeeper_analytics:
     image: wurstmeister/zookeeper
     hostname: zookeeper_analytics
-    restart: always
     ports:
       - "2181:2181"
     volumes:

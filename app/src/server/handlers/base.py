@@ -20,7 +20,7 @@ class Base(tornado.web.RequestHandler):
         self._init_helpers()
 
     def _init_templates(self):
-        self._templates_path = "./src/server/templates/"
+        self._templates_path = "./templates/"
         self._template = "main.html"
 
     def _init_default_params(self):
@@ -43,8 +43,8 @@ class Base(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header('Server', 'Analytics')
 
-        self.set_header('Cache-Control', 'max-age=60')
-        self.set_header('Expires',  datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
+        # self.set_header('Cache-Control', 'max-age=60')
+        # self.set_header('Expires',  datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
 
         self.set_header('X-XSS-Protection', '1; mode=block')
         self.set_header('X-Content-Type-Options', 'nosniff')

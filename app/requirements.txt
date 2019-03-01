@@ -4,4 +4,4 @@ pyyaml
 sqlalchemy
 clickhouse-driver
 kafka-python
-sqlalchemy-clickhouse
+clickhouse-sqlalchemy

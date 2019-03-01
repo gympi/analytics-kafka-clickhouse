@@ -2,17 +2,13 @@
 
 # chmod +x ./server.py
 
-import sys
 import multiprocessing
-
-sys.path.append('../libs/')
-
-from system_environment import SystemEnvironment
-from app.src.server import actions
-
 import tornado.ioloop
 import tornado.web
 import tornado.httpserver
+
+from app.src.server.actions import actions
+from app.src.libs.system_environment import SystemEnvironment
 
 
 def make_app():
