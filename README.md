@@ -24,17 +24,17 @@ pip3 install -r requirements.txt
 ```
 
 
-### Build docker-compose.yml analytics
+### Build services analytics
 ```bash
 sudo docker-compose -f docker-compose.yml build
 ```
 
-### Up docker-compose.yml analytics
+### Up services analytics
 ```bash
 sudo docker-compose -f docker-compose.yml up
 ```
 
-### Remove docker-compose.yml analytics
+### Remove services analytics
 ```bash
 sudo docker-compose -f docker-compose.yml rm -f
 ```
