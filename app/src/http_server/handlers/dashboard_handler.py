@@ -1,4 +1,5 @@
 import copy
+import time
 
 from libs.clickhouse_connect import session
 from libs.entities import VisitStat
@@ -18,6 +19,10 @@ class DashboardHandler(Base):
     }
 
     def get(self):
+        self.set_cookie('analytic_uid', 'HelloServer', '.analytics.ru', time.time() + 86400)
+        self.write('Hello')
+        self.write('analytic_uid: ' + str(self.get_cookie('analytic_uid')))
+        return
         params = copy.copy(self._default_params)
 
         for k, v in params.items():

@@ -11,3 +11,9 @@ services:
     host: 'localhost'
     port: 8123
     scheme: 'analytics'
+
+  Cookie:
+    cookie_name: 'analytic_uid'
+    cookie_age: 86400 # 60 * 60 * 24 = 1 day
+    cookie_domain: '.analytics.ru'
+    cookie_path: '/'

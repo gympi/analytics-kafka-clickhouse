@@ -1,11 +1,14 @@
-from .handlers.analytics_handler import AnalyticsHandler
-from .handlers.dashboard_handler import DashboardHandler
+from http_server.handlers.pixel_handler import PixelHandler
+from http_server.handlers.test_page_handler import TestMainPageHandler, TestInnerPageHandler
+from .handlers.tick_handler import TickHandler
 from .handlers.static_handler import StaticHandler
 
 actions = [
-    (r"/analytics/", AnalyticsHandler),
-    (r"/analytics/dashboard/", DashboardHandler),
+    (r"/", TestMainPageHandler),
+    (r"/test_page/", TestInnerPageHandler),
+    (r"/set-cookie/", PixelHandler),
 
-    (r"/analytics/static/(.*$)", StaticHandler, {"path": "./http_server/static"}),
+    (r"/tick/", TickHandler),
+    (r"/static/(.*$)", StaticHandler, {"path": "./http_server/static"}),
     (r"/(.*$)", StaticHandler, {"path": "./http_server/static"}),
 ]

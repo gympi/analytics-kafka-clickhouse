@@ -1,3 +1,4 @@
+# import datetime
 import json
 import timeit
 import tornado
@@ -41,8 +42,9 @@ class Base(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header('Server', 'Analytics')
 
-        # self.set_header('Cache-Control', 'max-age=60')
-        # self.set_header('Expires',  datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
+        self.set_header('pragma', 'no-cache')
+        self.set_header('Cache-Control', 'no-cache')
+        # self.set_header('Expires', datetime.datetime.utcnow() + datetime.timedelta(minutes=1))
 
         self.set_header('X-XSS-Protection', '1; mode=block')
         self.set_header('X-Content-Type-Options', 'nosniff')
@@ -51,7 +53,8 @@ class Base(tornado.web.RequestHandler):
         if 'Origin' in self.request.headers and self.request.headers['Origin'] in origin_urls:
             self.set_header('Access-Control-Allow-Origin', self.request.headers['Origin'])
             self.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-            self.set_header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With')
+            self.set_header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Cache-Control, pragma')
+            self.set_header('Access-Control-Allow-Credentials', 'true')
 
         self.clear_header('X-Frame-Options')
 
@@ -78,7 +81,7 @@ class Base(tornado.web.RequestHandler):
         self.write(json.dumps(data, default=str, separators=(',', ':')))
 
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        self.set_header("X-Time-app-build", '{:.5}'.format(str(timeit.default_timer() - self._start_execute)))
+        self.set_header("X-Time-build", '{:.5}'.format(str(timeit.default_timer() - self._start_execute)))
 
     def throw_404_page_not_exist(self):
         self.set_status(404)

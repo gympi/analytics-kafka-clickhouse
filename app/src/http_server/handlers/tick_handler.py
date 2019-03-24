@@ -8,9 +8,12 @@ from libs.storage_adapters import KafkaAdapter
 from .base import Base
 
 
-class AnalyticsHandler(Base):
+class TickHandler(Base):
     def get(self):
         try:
+            print('TickHandler')
+            print(len(self.request.cookies))
+            print(self.get_cookie('analytic_uid'))
             params = self._build_event()
             adapter = KafkaAdapter()
             adapter.send(params)

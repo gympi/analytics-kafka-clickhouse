@@ -37,3 +37,31 @@ class KafkaAdapter(AnalyticsAdapter):
     def send(self, params):
         self._producer.send('visit_stat_topic', params)
         self._producer.flush()
+
+
+# from aiokafka import AIOKafkaProducer
+# import asyncio
+# import tornado.ioloop
+# loop = asyncio.get_event_loop()
+# # loop = tornado.ioloop.IOLoop.current()
+# conf = SystemEnvironment().env['kafka']
+# producer = AIOKafkaProducer(loop=loop, bootstrap_servers='{}:{}'.format(conf['host'], conf['port']),
+#                                           value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8'))
+#
+# class AsyncKafkaAdapter:
+#     def __init__(self):
+#
+#
+#         # Get cluster layout and initial topic/partition leadership information
+#         producer.start()
+#
+#     async def send(self, params):
+#         try:
+#             # Produce message
+#             await producer.send_and_wait('visit_stat_topic', params)
+#             await producer.flush()
+#         finally:
+#             pass
+#
+#             # Wait for all pending messages to be delivered or expire.
+#             # await self._producer.stop()
