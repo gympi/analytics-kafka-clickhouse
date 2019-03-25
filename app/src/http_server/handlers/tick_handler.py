@@ -12,10 +12,14 @@ class TickHandler(Base):
     def get(self):
         try:
             print('TickHandler')
+            print(self.request.arguments)
             print(len(self.request.cookies))
             print(self.get_cookie('analytic_uid'))
             params = self._build_event()
             adapter = KafkaAdapter()
+            print(params)
+            self.set_header('Access-Control-Allow-Origin', params['hostname'])
+
             adapter.send(params)
 
         except Exception as e:

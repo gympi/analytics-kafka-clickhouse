@@ -10,12 +10,14 @@ class TestMainPageHandler(Base):
         # self.write('analytic_uid: ' + str(self.get_cookie('analytic_uid')))
 
         self.on_write_page(template=self._template_file,
-                           params={'title': 'Test Main Page'})
+                           params={'title': 'Test Main Page',
+                                   'link': '/test_page/'})
 
 
 class TestInnerPageHandler(Base):
-    _template_file = 'test_inner_page.html'
+    _template_file = 'test_page.html'
 
     def get(self):
         self.on_write_page(template=self._template_file,
-                           params={'title': 'Test Inner Page'})
+                           params={'title': 'Test Inner Page',
+                                   'link': '/'})

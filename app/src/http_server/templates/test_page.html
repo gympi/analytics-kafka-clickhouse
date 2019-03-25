@@ -8,6 +8,7 @@
   </head>
   <body>
     <h1>{{title}}</h1>
+    <a href="{{ link }}">{{ link }}</a>
   </body>
 
     <script type="text/javascript" charset="utf-8">
@@ -16,7 +17,7 @@
             sm.type = "text/javascript";
             sm.async = true;
             sm.defer = true;
-            sm.src = "/static/analytics.js";
+            sm.src = "//analytics.ru/static/analytics.js";
             var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(sm, s);
         })();

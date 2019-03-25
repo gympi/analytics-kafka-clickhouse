@@ -16,6 +16,7 @@ Inserted script
 
 */
 
+// Libs
 function buildUrl(url, parameters) {
     let qs = "";
     for (const key in parameters) {
@@ -33,13 +34,50 @@ function buildUrl(url, parameters) {
     return url;
 }
 
+function build_params(added_params){
+    return Object.assign({}, {
+            url_visit: window.location.href,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timestamp: Math.floor(Date.now() / 1000),
+
+        }, added_params);
+}
+
+function send_tick(parameters){
+    fetch(buildUrl("//analytics.ru/tick/", parameters), {
+        method: 'get',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'pragma': 'no-cache',
+            'Cache-Control': 'no-cache'
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+        mode: 'cors'})
+      .then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+            return;
+          }
+          response.json().then(function(data) {
+            console.log('With analytics everything is fine!');
+          });
+        }
+      )
+      .catch(function(err) {
+        console.log('Fetch Error', err);
+      });
+}
+
+// Init environment
+
 var ua = navigator.userAgent.toLowerCase();
-if (ua.indexOf('safari') !== -1) {
-  if (ua.indexOf('chrome') > -1) {
-    var el = createAnalyticImage();
-  } else { // Safari
+if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
     var el = createAnalyticIframe();
-  }
+} else {
+    var el = createAnalyticImage();
 }
 
 function createAnalyticIframe(){
@@ -63,9 +101,10 @@ function createAnalyticImage(){
     return img
 }
 
+// Load Pge
 function afterLoad() {
   console.log('Send tick');
-  send_tick();
+  send_tick(build_params({state: 'open'}));
 }
 
 el.onload = el.onerror = function() {
@@ -77,34 +116,16 @@ el.onload = el.onerror = function() {
 
 el.onreadystatechange = function() {
   var self = this;
-  if (this.readyState == "complete" || this.readyState == "loaded") {
+  if (this.readyState === "complete" || this.readyState === "loaded") {
     setTimeout(function() {
       self.onload()
     }, 0); // Save "this" for onload
   }
 };
 
-function send_tick(){
-    fetch(buildUrl("/tick/", {
-            url_visit: window.location.href,
-        }), {headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'pragma': 'no-cache',
-            'Cache-Control': 'no-cache'
-        }, credentials: 'include'})
-      .then(
-        function(response) {
-          if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-              response.status);
-            return;
-          }
-          response.json().then(function(data) {
-            console.log('With analytics everything is fine!');
-          });
-        }
-      )
-      .catch(function(err) {
-        console.log('Fetch Error', err);
-      });
-}
+// Close page
+window.onbeforeunload = function () {
+    send_tick(build_params({state: 'close'}))
+};
+
+
