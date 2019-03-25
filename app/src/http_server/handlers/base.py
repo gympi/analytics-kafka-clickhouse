@@ -50,7 +50,6 @@ class Base(tornado.web.RequestHandler):
         self.set_header('X-Content-Type-Options', 'nosniff')
         self.set_header('Strict-Transport-Security', 'max-age=31536000')
 
-        # if 'Origin' in self.request.headers and self.request.headers['Origin'] in origin_urls:
         # self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
         self.set_header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Requested-With, Cache-Control, pragma')

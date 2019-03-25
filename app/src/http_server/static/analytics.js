@@ -73,6 +73,16 @@ function send_tick(parameters){
 
 // Init environment
 
+
+var width = window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+var height = window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+
+
 var ua = navigator.userAgent.toLowerCase();
 if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
     var el = createAnalyticIframe();
