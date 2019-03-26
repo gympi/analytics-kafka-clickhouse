@@ -5,4 +5,5 @@ sqlalchemy
 clickhouse-driver
 kafka-python
 clickhouse-sqlalchemy
-aiokafka
+#aiokafka
+kiel

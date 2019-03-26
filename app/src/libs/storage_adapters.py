@@ -2,7 +2,7 @@ import json
 from abc import ABC, abstractmethod
 from clickhouse_driver import Client
 from kafka import KafkaProducer
-
+from kiel import clients
 from libs.system_environment import SystemEnvironment
 
 
@@ -37,6 +37,27 @@ class KafkaAdapter(AnalyticsAdapter):
     def send(self, params):
         self._producer.send('visit_stat_topic', params)
         self._producer.flush()
+
+
+class kielKafkaAdapter(AnalyticsAdapter):
+    def __init__(self):
+        conf = SystemEnvironment().env['kafka']
+
+        self._producer = clients.Producer(
+            ['{}:{}'.format(conf['host'], conf['port'])],
+            key_maker=None,
+            partitioner=None,
+            compression=None,
+            batch_size=1,
+            required_acks=1,
+            ack_timeout=2000,  # milliseconds
+        )
+
+    def send(self, params):
+        self._producer.produce('visit_stat_topic', params)
+    # await self._producer.flush()
+
+
 
 
 # from aiokafka import AIOKafkaProducer

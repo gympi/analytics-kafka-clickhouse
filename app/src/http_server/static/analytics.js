@@ -36,9 +36,13 @@ function buildUrl(url, parameters) {
 
 function build_params(added_params){
     return Object.assign({}, {
-            url_visit: window.location.href,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            timestamp: Math.floor(Date.now() / 1000),
+            urlVisit: window.location.href,
+            timezoneClient: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            sessionStartClient: sessionStartClient,
+            screenWidth: width,
+            screenHeight: height,
+            width: width,
+            height: height,
 
         }, added_params);
 }
@@ -54,17 +58,22 @@ function send_tick(parameters){
         credentials: 'include',
         cache: 'no-cache',
         mode: 'cors'})
-      .then(
-        function(response) {
+      .then(function(response){
           if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' +
               response.status);
             return;
           }
-          response.json().then(function(data) {
-            console.log('With analytics everything is fine!');
-          });
-        }
+
+          var contentType = response.headers.get("content-type");
+            if(contentType && contentType.includes("application/json")) {
+              return response.json();
+            }
+            throw new TypeError("Oops, we haven't got JSON!");
+      })
+      .then(function(json) {
+              sessionUidClient=json.sessionUidClient
+          }
       )
       .catch(function(err) {
         console.log('Fetch Error', err);
@@ -73,6 +82,8 @@ function send_tick(parameters){
 
 // Init environment
 
+var sessionUidClient = undefined;
+var sessionStartClient = Math.floor(Date.now() / 1000);
 
 var width = window.innerWidth
 || document.documentElement.clientWidth
@@ -135,7 +146,7 @@ el.onreadystatechange = function() {
 
 // Close page
 window.onbeforeunload = function () {
-    send_tick(build_params({state: 'close'}))
+    send_tick(build_params({state: 'close', sessionUidClient: sessionUidClient, sessionStopClient: Math.floor(Date.now() / 1000), sessionDurationClient: Math.floor(Date.now() / 1000) - sessionStartClient}))
 };
 
 
