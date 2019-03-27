@@ -5,7 +5,7 @@ import uuid
 
 from urllib.parse import urlparse
 
-from libs.storage_adapters import kielKafkaAdapter
+from libs.storage_adapters import KafkaAdapter
 from .base import Base
 
 
@@ -49,7 +49,7 @@ class TickHandler(Base):
         print(params)
 
         try:
-            adapter = kielKafkaAdapter()
+            adapter = KafkaAdapter()
             adapter.send(params)
         except Exception as e:
             print("Error {}: ".format(inspect.currentframe().f_code.co_name), e)
