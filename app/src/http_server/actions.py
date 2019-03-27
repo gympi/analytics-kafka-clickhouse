@@ -5,7 +5,7 @@ from .handlers.static_handler import StaticHandler
 
 actions = [
     (r"/", TestMainPageHandler),
-    (r"/test_page/", TestInnerPageHandler),
+    (r"/test_page_(\d+)/", TestInnerPageHandler),
     (r"/set-cookie/", PixelHandler),
 
     (r"/tick/", TickHandler),

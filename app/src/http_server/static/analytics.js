@@ -149,4 +149,52 @@ window.onbeforeunload = function () {
     send_tick(build_params({state: 'close', sessionUidClient: sessionUidClient, sessionStopClient: Math.floor(Date.now() / 1000), sessionDurationClient: Math.floor(Date.now() / 1000) - sessionStartClient}))
 };
 
+//window.addEventListener("load", constructor);
+//window.addEventListener("beforeunload", destructor, false);
+
+
+
+// var Environments = {};
+//
+// Environments.URL = (function(){
+//     var hashParams = {};
+//     var searchParams = {};
+//
+//     console.log(window.location);
+//
+//     var _initHashParams = function(){
+//         hashParams = _splitParams(window.location.hash)
+//     };
+//
+//     var _initSearchParams = function(){
+//         searchParams = _splitParams(window.location.search)
+//     };
+//
+//     var _splitParams = function(str){
+//         return str.split('&').reduce(function (result, item) {
+//             var parts = item.split('=');
+//             result[parts[0].replace(/[?#]/, '')] = parts[1];
+//             return result;
+//         }, {});
+//     };
+//
+//     var urlParam = function (name){
+//         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+//         if (results==null){
+//            return null;
+//         }
+//         else{
+//            return decodeURI(results[1]) || 0;
+//         }
+//     }
+//
+//     _initHashParams();
+//     _initSearchParams();
+//     window.addEventListener("hashchange", _initHashParams);
+// })();
+
+
+var a = '<div class="js-analytics-mark" style="position: absolute;left: 0px;right: 0px;height: 100px; width: 200px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78);top: 100px; pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection</span></div>'
+
+document.getElementsByTagName("body")[0].innerHTML += a;
 
