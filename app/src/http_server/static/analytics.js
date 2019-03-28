@@ -94,6 +94,18 @@ var height = window.innerHeight
 || document.body.clientHeight;
 
 
+function windowRect() {
+    var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+
+    var height = window.innerHeight
+    || document.documentElement.clientHeight
+    || document.body.clientHeight;
+
+    return {width: width, height: height}
+}
+
 var ua = navigator.userAgent.toLowerCase();
 if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
     var el = createAnalyticIframe();
@@ -194,7 +206,106 @@ window.onbeforeunload = function () {
 // })();
 
 
-var a = '<div class="js-analytics-mark" style="position: absolute;left: 0px;right: 0px;height: 100px; width: 200px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78);top: 100px; pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection</span></div>'
+// var a = '<div class="js-analytics-mark" style="position: absolute;left: 0px;right: 0px;height: 100px; width: 200px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78);top: 100px; pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection</span></div>'
+//
+// document.getElementsByTagName("body")[0].innerHTML += a;
 
-document.getElementsByTagName("body")[0].innerHTML += a;
 
+function mark(width, height, top, left, name_element) {
+    document.getElementsByTagName("body")[0].innerHTML += '<div class="js-analytics-mark" style="position: absolute; left: ' + left.toString() + 'px; right: 0px; top: ' + top.toString() + 'px; height: ' + height.toString() + 'px; width: ' + width.toString() + 'px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78); pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection '+ name_element.toString() + '</span></div>'
+}
+
+var selectors = ['.last_news_1', '.last_news_3'];
+
+var observedElements = [];
+
+class ObservedElement {
+
+  constructor(element) {
+    this.element = element;
+    this.isView = false;
+    this.rect = element.getBoundingClientRect();
+    this.element.addEventListener("eventIsViewObservedElement", function(event) {
+    console.log(event)
+}, false);
+  }
+
+  setIsView(){
+      this.isView = true;
+      console.log(this.element);
+      console.log(this.isView);
+      this.element.dispatchEvent(new Event("eventIsViewObservedElement"))
+  }
+}
+
+(function () {
+  if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function forEach (callback, thisArg) {
+      if (typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function');
+      }
+      var array = this;
+      thisArg = thisArg || this;
+      for (var i = 0, l = array.length; i !== l; ++i) {
+        callback.call(thisArg, array[i], i, array);
+      }
+    };
+  }
+})();
+
+selectors.forEach(function(selector) {
+    console.log('Work selector:');
+
+    var elements = document.querySelectorAll(selector);
+
+    console.log('Elements: ');
+    console.log(elements.length);
+
+     elements.forEach(function(element) {
+         observedElements.push(new ObservedElement(element));
+
+        var elemPosition = element.getBoundingClientRect();
+        console.log(elemPosition);
+        mark(elemPosition.width, elemPosition.height, elemPosition.top, elemPosition.left, selector);
+    });
+});
+
+
+function getViewPort(){
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    var scrollRight = scrollLeft + windowRect().width;
+    var scrollBottom = scrollTop + windowRect().height;
+
+    return {
+        scrollTop: scrollTop,
+        scrollLeft: scrollLeft,
+        scrollRight: scrollRight,
+        scrollBottom: scrollBottom
+    }
+}
+
+window.addEventListener("scroll", function(event) {
+    var viewPort = getViewPort();
+    observedElements.filter(elementItem => elementItem.isView === false).forEach(function (elementItem) {
+        var elementRect = elementItem.rect;
+        if(elementRect.bottom > viewPort.scrollTop && elementRect.top < viewPort.scrollBottom){
+            elementItem.setIsView();
+        }
+    });
+}, false);
+
+
+window.addEventListener("eventIsViewObservedElement", function(event) {
+    console.log(event)
+}, false);
+
+// function isInViewport() {
+//     var elementTop = $(this).offset().top;
+//     var elementBottom = elementTop + $(this).outerHeight();
+//     var viewportTop = $(window).scrollTop();
+//     var viewportBottom = viewportTop + $(window).height();
+//
+//
+//     return elementBottom > viewportTop && elementTop < viewportBottom;
+// }
