@@ -165,76 +165,172 @@ window.onbeforeunload = function () {
 //window.addEventListener("beforeunload", destructor, false);
 
 
+var AnalyticCloudFun = {};
 
-// var Environments = {};
-//
-// Environments.URL = (function(){
-//     var hashParams = {};
-//     var searchParams = {};
-//
-//     console.log(window.location);
-//
-//     var _initHashParams = function(){
-//         hashParams = _splitParams(window.location.hash)
-//     };
-//
-//     var _initSearchParams = function(){
-//         searchParams = _splitParams(window.location.search)
-//     };
-//
-//     var _splitParams = function(str){
-//         return str.split('&').reduce(function (result, item) {
-//             var parts = item.split('=');
-//             result[parts[0].replace(/[?#]/, '')] = parts[1];
-//             return result;
-//         }, {});
-//     };
-//
-//     var urlParam = function (name){
-//         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-//         if (results==null){
-//            return null;
-//         }
-//         else{
-//            return decodeURI(results[1]) || 0;
-//         }
-//     }
-//
-//     _initHashParams();
-//     _initSearchParams();
-//     window.addEventListener("hashchange", _initHashParams);
-// })();
+AnalyticCloudFun.Environments = {};
 
+AnalyticCloudFun.Environments = (function(){
+    var hashParams = {};
+    var searchParams = {};
 
-// var a = '<div class="js-analytics-mark" style="position: absolute;left: 0px;right: 0px;height: 100px; width: 200px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78);top: 100px; pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection</span></div>'
-//
-// document.getElementsByTagName("body")[0].innerHTML += a;
+    console.log(window.location);
 
+    var initHashParams = function(){
+        hashParams = _splitParams(window.location.hash);
+        return hashParams
+    };
 
-function mark(width, height, top, left, name_element) {
-    document.getElementsByTagName("body")[0].innerHTML += '<div class="js-analytics-mark" style="position: absolute; left: ' + left.toString() + 'px; right: 0px; top: ' + top.toString() + 'px; height: ' + height.toString() + 'px; width: ' + width.toString() + 'px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78); pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection '+ name_element.toString() + '</span></div>'
+    var initSearchParams = function(){
+        searchParams = _splitParams(window.location.search);
+    };
+
+    var _splitParams = function(str){
+        return str.split('&').reduce(function (result, item) {
+            var parts = item.split('=');
+            result[parts[0].replace(/[?#]/, '')] = parts[1];
+            return result;
+        }, {});
+    };
+
+    var urlParam = function (name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+           return null;
+        }
+        else{
+           return decodeURI(results[1]) || 0;
+        }
+    };
+
+    initHashParams();
+    initSearchParams();
+    window.addEventListener("hashchange", initHashParams);
+
+    return {hashParams: hashParams, initHashParams: initHashParams, searchParams: searchParams}
+})();
+
+function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+
+  // Change this to div.childNodes to support multiple top-level nodes
+  return div.firstChild;
 }
 
-var selectors = ['.last_news_1', '.last_news_3'];
+function mark(width, height, top, left, name_element) {
+    var element = createElementFromHTML('<div class="js-analytics-mark" style="position: absolute; left: ' + left.toString() + 'px; right: 0px; top: ' + top.toString() + 'px; height: ' + height.toString() + 'px; width: ' + width.toString() + 'px; z-index: 9999;opacity: 0.5;background: rgb(244, 78, 78); pointer-events: none;"><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(244, 78, 78); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">Block selection '+ name_element.toString() + '</span></div>');
+    document.getElementsByTagName("body")[0].appendChild(element);
+    return element;
+}
+
+function markView(top) {
+    rect = windowRect();
+    var width = rect.width / 100 * 95;
+    var element = createElementFromHTML('<div class="js-analytics-mark" id="markView" style="position: absolute; margin-left: auto; margin-right: auto; top: ' + top.toString() + 'px; height: 3px; width: ' + width.toString() + 'px; z-index: 9999;opacity: 0.5; background: rgb(135,206,250); pointer-events: none;"><div style="position: absolute; width: 3px; height: 23px; top: -10px; background: rgb(135,206,250); pointer-events: none;"></div><div style="position: absolute; width: 3px; height: 23px; top: -10px; left: ' + width.toString() + 'px; background: rgb(135,206,250); pointer-events: none;"></div><span style="position: absolute; top: -28px; left: 16px; font-family: Arial; font-size: 15px; color: white; background: rgb(135,206,250); line-height: 32px; padding: 0px 16px; display: inline-block; border-radius: 3px;">View mark</span></div>');
+    document.getElementsByTagName("body")[0].appendChild(element);
+    return element;
+}
+
+AnalyticCloudFun.Develop = (function () {
+
+    var _initDevelopEnveroment = function(flag){
+        console.log(AnalyticCloudFun.Environments.initHashParams()['dev']);
+        observedElements.forEach(function(observedElement) {
+            if (Number.parseInt(AnalyticCloudFun.Environments.initHashParams()['dev']) > 0)
+                observedElement.showMarkBlock();
+            else
+                observedElement.hideMarkBlock();
+        });
+
+        markView();
+
+        window.addEventListener("scroll", function(event) {
+            var viewPort = getViewPort();
+            document.getElementById('markView').style.top = viewPort.scrollTop + windowRect().height / 100 * 70  + 'px';
+        });
+    };
+
+
+    window.addEventListener("hashchange", _initDevelopEnveroment);
+})();
+
+
+
+
+var selectors = ['.last_news_1', '.last_news_3', '.last_news_4'];
 
 var observedElements = [];
 
 class ObservedElement {
 
-  constructor(element) {
+  constructor(element, selector) {
     this.element = element;
+    this.selector = selector;
     this.isView = false;
     this.rect = element.getBoundingClientRect();
+    this._on = false;
+    this.mark = undefined;
+
     this.element.addEventListener("eventIsViewObservedElement", function(event) {
-    console.log(event)
-}, false);
+        console.log(event)
+    }, false);
   }
 
   setIsView(){
       this.isView = true;
+
+      if (this.mark !== undefined)
+        this.mark.style.background = 'rgb(135,206,250)';
       console.log(this.element);
       console.log(this.isView);
       this.element.dispatchEvent(new Event("eventIsViewObservedElement"))
+  }
+
+  showMarkBlock(){
+      if (!this._on){
+        this._on = true;
+        this.mark = mark(this.rect.width, this.rect.height, this.rect.top, this.rect.left, this.selector);
+      }
+  }
+
+  hideMarkBlock(){
+      if (this._on){
+        this._on = false;
+        this.mark.parentElement.removeChild(this.mark);
+      }
+  }
+}
+
+class MarkView {
+  constructor(top) {
+    this.buildTop();
+
+    this._on = false;
+    this.mark = undefined;
+
+    document.addEventListener("scrol", this.buildTop, false);
+  }
+
+  buildTop(){
+    var rect = windowRect();
+    this.top = rect.height / 100 * 70;
+  }
+
+  showMarkBlock(){
+      if (!this._on){
+        this._on = true;
+        this.mark = markView(this.top);
+        window.addEventListener("scrol", function (event) {
+            this.mark.style.top = this.top + 'px';
+        }, false);
+      }
+  }
+
+  hideMarkBlock(){
+      if (this._on){
+        this._on = false;
+        this.mark.parentElement.removeChild(this.mark);
+      }
   }
 }
 
@@ -254,19 +350,10 @@ class ObservedElement {
 })();
 
 selectors.forEach(function(selector) {
-    console.log('Work selector:');
-
     var elements = document.querySelectorAll(selector);
 
-    console.log('Elements: ');
-    console.log(elements.length);
-
-     elements.forEach(function(element) {
-         observedElements.push(new ObservedElement(element));
-
-        var elemPosition = element.getBoundingClientRect();
-        console.log(elemPosition);
-        mark(elemPosition.width, elemPosition.height, elemPosition.top, elemPosition.left, selector);
+    elements.forEach(function(element) {
+        observedElements.push(new ObservedElement(element, selector));
     });
 });
 
@@ -289,9 +376,14 @@ window.addEventListener("scroll", function(event) {
     var viewPort = getViewPort();
     observedElements.filter(elementItem => elementItem.isView === false).forEach(function (elementItem) {
         var elementRect = elementItem.rect;
-        if(elementRect.bottom > viewPort.scrollTop && elementRect.top < viewPort.scrollBottom){
+
+        console.log(elementRect.bottom);
+        //if(elementRect.bottom < viewPort.scrollBottom && elementRect.top > viewPort.scrollTop){
+        if(elementRect.top < viewPort.scrollBottom -  windowRect().height / 100 * 30){
             elementItem.setIsView();
         }
+
+
     });
 }, false);
 
@@ -300,7 +392,12 @@ window.addEventListener("eventIsViewObservedElement", function(event) {
     console.log(event)
 }, false);
 
-// function isInViewport() {
+//
+// function isViewMark(element, ) {
+//     return element.top < viewPort.scrollBottom -  windowRect().height / 100 * 30
+// }
+//
+// function isViewPort(element, viewPort) {
 //     var elementTop = $(this).offset().top;
 //     var elementBottom = elementTop + $(this).outerHeight();
 //     var viewportTop = $(window).scrollTop();

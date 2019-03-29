@@ -9,7 +9,7 @@ import tornado.web
 
 data = None
 try:
-    with open('./http_server/static/p.png', 'rb') as f:
+    with open('./static/p.png', 'rb') as f:
         data = f.read()
 except IOError as e:
     print("Error {}: ".format(inspect.currentframe().f_code.co_name), e)

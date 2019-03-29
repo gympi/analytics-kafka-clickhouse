@@ -1,4 +1,4 @@
-from http_server.handlers.base import Base
+from .base import Base
 
 
 links = ('/', '/test_page_1/', '/test_page_2/', '/test_page_3/')

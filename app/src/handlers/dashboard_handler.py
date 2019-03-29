@@ -3,7 +3,7 @@ import time
 
 from libs.clickhouse_connect import session
 from libs.entities import VisitStat
-from http_server.handlers.base import Base
+from .base import Base
 
 
 class DashboardHandler(Base):

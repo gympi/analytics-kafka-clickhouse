@@ -12,7 +12,7 @@ class SystemEnvironment:
 
             work_env = os.environ.get('WORK_ENV', 'local')
 
-            self.env = yaml.load(open(self._conf_path + '/' + work_env + '.yaml'))
+            self.env = yaml.load(open(self._conf_path + '/' + work_env + '.yaml'), Loader=yaml.FullLoader)
 
             if self.env:
                 self.env = self.env.get('services', list())
