@@ -39,10 +39,10 @@ function build_params(added_params){
             urlVisit: window.location.href,
             timezoneClient: Intl.DateTimeFormat().resolvedOptions().timeZone,
             sessionStartClient: sessionStartClient,
-            screenWidth: width,
-            screenHeight: height,
-            width: width,
-            height: height,
+            screenWidth: windowRect().width,
+            screenHeight: windowRect().height,
+            width: windowRect().width,
+            height: windowRect().height,
 
         }, added_params);
 }
@@ -85,14 +85,18 @@ function send_tick(parameters){
 var sessionUidClient = undefined;
 var sessionStartClient = Math.floor(Date.now() / 1000);
 
-var width = window.innerWidth
-|| document.documentElement.clientWidth
-|| document.body.clientWidth;
 
-var height = window.innerHeight
-|| document.documentElement.clientHeight
-|| document.body.clientHeight;
+String.prototype.endWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
 
+function isInt(n){
+    return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n){
+    return Number(n) === n && n % 1 !== 0;
+}
 
 function windowRect() {
     var width = window.innerWidth
@@ -103,7 +107,26 @@ function windowRect() {
     || document.documentElement.clientHeight
     || document.body.clientHeight;
 
-    return {width: width, height: height}
+    return {
+        width: width,
+        height: height
+    }
+}
+
+function viewPort(){
+    var winRect = windowRect();
+
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    var scrollRight = scrollLeft + winRect.width;
+    var scrollBottom = scrollTop + winRect.height;
+
+    return {
+        scrollTop: scrollTop,
+        scrollLeft: scrollLeft,
+        scrollRight: scrollRight,
+        scrollBottom: scrollBottom
+    }
 }
 
 var ua = navigator.userAgent.toLowerCase();
@@ -245,16 +268,14 @@ AnalyticCloudFun.Develop = (function () {
         markView();
 
         window.addEventListener("scroll", function(event) {
-            var viewPort = getViewPort();
-            document.getElementById('markView').style.top = viewPort.scrollTop + windowRect().height / 100 * 70  + 'px';
+            var _viewPort = viewPort();
+            document.getElementById('markView').style.top = _viewPort.scrollTop + windowRect().height / 100 * 70  + 'px';
         });
     };
 
 
     window.addEventListener("hashchange", _initDevelopEnveroment);
 })();
-
-
 
 
 var selectors = ['.last_news_1', '.last_news_3', '.last_news_4'];
@@ -301,17 +322,19 @@ class ObservedElement {
   }
 }
 
-class MarkView {
-  constructor(top) {
-    this.buildTop();
+var observerElements = [];
+
+class ObserverElement {
+  constructor() {
+    this.buildPosition();
 
     this._on = false;
     this.mark = undefined;
 
-    document.addEventListener("scrol", this.buildTop, false);
+    document.addEventListener("scrol", this.buildPosition, false);
   }
 
-  buildTop(){
+  buildPosition(){
     var rect = windowRect();
     this.top = rect.height / 100 * 70;
   }
@@ -357,33 +380,19 @@ selectors.forEach(function(selector) {
     });
 });
 
-
-function getViewPort(){
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-    var scrollRight = scrollLeft + windowRect().width;
-    var scrollBottom = scrollTop + windowRect().height;
-
-    return {
-        scrollTop: scrollTop,
-        scrollLeft: scrollLeft,
-        scrollRight: scrollRight,
-        scrollBottom: scrollBottom
-    }
-}
+observerElements.push(new ObserverElement());
 
 window.addEventListener("scroll", function(event) {
-    var viewPort = getViewPort();
-    observedElements.filter(elementItem => elementItem.isView === false).forEach(function (elementItem) {
-        var elementRect = elementItem.rect;
+    observerElements.forEach(function (observerElement) {
+        observedElements.filter(elementItem => elementItem.isView === false).forEach(function (elementItem) {
+            var elementRect = elementItem.rect;
 
-        console.log(elementRect.bottom);
-        //if(elementRect.bottom < viewPort.scrollBottom && elementRect.top > viewPort.scrollTop){
-        if(elementRect.top < viewPort.scrollBottom -  windowRect().height / 100 * 30){
-            elementItem.setIsView();
-        }
-
-
+            console.log(elementRect.bottom);
+            //if(elementRect.bottom < viewPort.scrollBottom && elementRect.top > viewPort.scrollTop){
+            if(elementRect.top < observerElement.top){
+                elementItem.setIsView();
+            }
+        });
     });
 }, false);
 
@@ -391,18 +400,3 @@ window.addEventListener("scroll", function(event) {
 window.addEventListener("eventIsViewObservedElement", function(event) {
     console.log(event)
 }, false);
-
-//
-// function isViewMark(element, ) {
-//     return element.top < viewPort.scrollBottom -  windowRect().height / 100 * 30
-// }
-//
-// function isViewPort(element, viewPort) {
-//     var elementTop = $(this).offset().top;
-//     var elementBottom = elementTop + $(this).outerHeight();
-//     var viewportTop = $(window).scrollTop();
-//     var viewportBottom = viewportTop + $(window).height();
-//
-//
-//     return elementBottom > viewportTop && elementTop < viewportBottom;
-// }
